@@ -215,7 +215,8 @@ class Genome():
 
             for n in self.network:
                 # for each node in the network engage it (see node class for what this does)
-                n.engage()
+                n.activate()
+                n.propagate_output()
 
             # the outputs are nodes[inputs] to nodes[inputs+outputs-1]
             outs: list[float] = [0] * self.outputs

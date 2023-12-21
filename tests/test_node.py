@@ -21,7 +21,8 @@ class TestNode(unittest.TestCase):
     def test_engage(self):
         # Test engage method when layer is not 0
         self.node.input_sum = 0.5
-        self.node.engage()
+        self.node.activate()
+        self.node.propagate_output()
         # Output value should be updated
         self.assertNotEqual(self.node.output_value, 0)
 

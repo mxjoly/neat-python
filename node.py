@@ -21,7 +21,8 @@ class Node():
 
     Methods:
     - get_activation_function(activation_function: ActivationFunctions) -> callable: Get the activation function based on the specified string.
-    - engage() -> None: The node sends its output to the inputs of the nodes it's connected to.
+    - activate() -> None: Activate the node using its activation function.
+    - propagate_output() -> None: Propagate the output to connected nodes.
     - mutate(config: NeatConfig, is_bias_node: bool = False) -> None: Mutate the node's properties based on the NEAT configuration.
     - is_connected_to(node: Node) -> bool: Check if this node is connected to the specified node.
     - clone() -> Node: Return a copy of this node.
@@ -57,38 +58,34 @@ class Node():
         - callable: The corresponding activation function.
 
         """
-        if activation_function == "elu":
-            return activation_functions.elu
-        elif activation_function == "leaky_relu":
-            return activation_functions.leaky_relu
-        elif activation_function == "linear":
-            return activation_functions.linear
-        elif activation_function == "prelu":
-            return activation_functions.prelu
-        elif activation_function == "relu":
-            return activation_functions.relu
-        elif activation_function == "sigmoid":
-            return activation_functions.sigmoid
-        elif activation_function == "softmax":
-            return activation_functions.softmax
-        elif activation_function == "step":
-            return activation_functions.step
-        elif activation_function == "swish":
-            return activation_functions.swish
-        elif activation_function == "tanh":
-            return activation_functions.tanh
-        else:
-            return activation_functions.sigmoid
+        function_mapping = {
+            "elu": activation_functions.elu,
+            "leaky_relu": activation_functions.leaky_relu,
+            "linear": activation_functions.linear,
+            "prelu": activation_functions.prelu,
+            "relu": activation_functions.relu,
+            "sigmoid": activation_functions.sigmoid,
+            "softmax": activation_functions.softmax,
+            "step": activation_functions.step,
+            "swish": activation_functions.swish,
+            "tanh": activation_functions.tanh,
+        }
+        return function_mapping.get(activation_function, activation_functions.sigmoid)
 
-    def engage(self) -> None:
+    def activate(self) -> None:
         """
-        The node sends its output to the inputs of the nodes it's connected to.
+        Activate the node using its activation function.
 
         """
         if self.layer != 0:
             activation = self.get_activation_function(self.activation_function)
             self.output_value = activation(self.input_sum)
 
+    def propagate_output(self) -> None:
+        """
+        Propagate the output to connected nodes.
+
+        """
         for c in self.output_connections:
             if c.enabled:
                 c.to_node.input_sum += c.weight * self.output_value

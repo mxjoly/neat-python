@@ -21,7 +21,7 @@ class Species():
     Methods:
     - __init__(self, genome: Genome) -> None: Initialize a Species instance.
     - add_to_specie(self, genome: Genome) -> None: Add a genome to the species.
-    - same_specie(self, genome: Genome, config: NeatConfig) -> bool: Check if the genome belongs to this species.
+    - same_species(self, genome: Genome, config: NeatConfig) -> bool: Check if the genome belongs to this species.
     - get_excess_disjoint_genes(self, genome1: Genome, genome2: Genome) -> int: Return the number of excess and disjoint genes between two genomes.
     - average_weight_diff(self, genome1: Genome, genome2: Genome) -> float: Return the average weight difference between matching genes in two genomes.
     - sort_genomes(self) -> None: Sort genomes in the species by fitness.
@@ -47,7 +47,7 @@ class Species():
         self.average_fitness = 0
         self.stagnation = 0  # how many generations the species has gone without an improvement
 
-        if genome != None:
+        if genome is not None:
             self.genomes.append(genome)
             # since it is the only one in the species it is by default the best
             self.best_fitness = genome.fitness
