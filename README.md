@@ -32,7 +32,8 @@ def evaluate_genome(genome):
     # Evaluate the fitness of the genome and set genome.fitness
 
 # Run NEAT algorithm
-population.run(evaluate_genome)
+generations = 100
+population.run(evaluate_genome, generations)
 ```
 
 ## Customize NEAT Configuration:
