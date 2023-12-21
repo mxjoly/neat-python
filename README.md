@@ -20,6 +20,7 @@ This project implements the NEAT (NeuroEvolution of Augmenting Topologies) algor
 from neat.__types__ import NeatConfig
 from neat.default_config import default_config
 from neat.population import Population
+from neat.genome import Genome
 
 # Initialize NEAT configuration
 config: NeatConfig = default_config
@@ -27,7 +28,7 @@ config: NeatConfig = default_config
 # Initialize population
 population = Population(config)
 
-def evaluate_genome(genome):
+def evaluate_genome(genome: Genome):
     # Your evaluation logic here
     # Evaluate the fitness of the genome and set genome.fitness
 
