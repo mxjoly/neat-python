@@ -6,14 +6,6 @@ This project implements the NEAT (NeuroEvolution of Augmenting Topologies) algor
 
 - **NEAT Algorithm**: The NEAT algorithm is a method for evolving artificial neural networks. It allows the evolution of both the structure and weights of neural networks, starting from minimal structures and incrementally adding complexity over generations.
 
-- **Project Structure**:
-  - `node.py`: Defines the Node class, representing nodes in the neural network.
-  - `connection_gene.py`: Defines the ConnectionGene class, representing connections between nodes.
-  - `activation_functions.py`: Contains various activation functions used in the neural network.
-  - `__types__.py`: Defines a TypedDict for NEAT configuration parameters.
-  - `default_config.py`: Provides a default configuration for NEAT.
-  - `connection_history.py`: Implements ConnectionHistory for tracking innovation numbers.
-
 ## Quick Start
 
 ```python
