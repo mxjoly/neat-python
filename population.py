@@ -1,5 +1,4 @@
 import math
-from tqdm import tqdm
 from typing import Callable
 from multiprocessing.pool import ThreadPool
 from __types__ import NeatConfig
@@ -58,11 +57,6 @@ class Population():
         self.innovation_history: list[ConnectionHistory] = []
         self.species: list[Species] = []
 
-        bar: tqdm = None
-        if display_progress:
-            print("⏳ Initialize the population...")
-            bar = tqdm(total=config["population_size"])
-
         for i in range(0, config["population_size"]):
             genome = Genome(config)
             genome.mutate(self.innovation_history)
@@ -71,14 +65,6 @@ class Population():
             if config["initial_connections"] == "full":
                 genome.fully_connect(self.innovation_history)
             self.genomes.append(genome)
-
-            if bar:
-                bar.update(1)
-                bar.refresh()
-
-        if bar:
-            bar.close()
-            print("✅ Population ready!")
 
     def set_best_genome(self) -> None:
         """
