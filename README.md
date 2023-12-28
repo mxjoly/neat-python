@@ -20,7 +20,7 @@ config: NeatConfig = default_config
 # Initialize population
 population = Population(config)
 
-def evaluate_genome(genome: Genome):
+def evaluate_genome(genome: Genome, generation: int):
     # Your evaluation logic here
     # Evaluate the fitness of the genome and set genome.fitness
 
