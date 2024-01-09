@@ -1,12 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from default_config import default_config
-from population import Population
-from genome import Genome
-from __types__ import NeatConfig
-from connection_history import ConnectionHistory
-from species import Species
-from node import Node
+from __init__ import default_config, Population, Genome, NeatConfig, ConnectionHistory, Species, Node
 from random import randrange
 
 
@@ -37,6 +31,28 @@ class TestPopulation(unittest.TestCase):
         self.config["no_fitness_termination"] = False
         self.config["min_species_size"] = 2
         self.config["fitness_threshold"] = 100
+
+    def runTest(self):
+        self.setUp()
+        self.test_population_initialization()
+        self.setUp()
+        self.test_set_best_genome()
+        self.setUp()
+        self.test_speciate()
+        self.setUp()
+        self.test_reproduce_species()
+        self.setUp()
+        self.test_sort_species()
+        self.setUp()
+        self.test_kill_stagnant_species()
+        self.setUp()
+        self.test_kill_bad_species()
+        self.setUp()
+        self.test_reset_on_extinction()
+        self.setUp()
+        self.test_update_species()
+        self.setUp()
+        self.test_get_genome()
 
     def test_population_initialization(self):
         population = Population(self.config)

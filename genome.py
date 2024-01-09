@@ -98,9 +98,8 @@ class Genome():
                 Node(i + self.inputs, self.config["activation_default"], 1))
             self.next_node += 1
 
-        # bias node
-        self.nodes.append(
-            Node(self.next_node, self.config["activation_default"], 0))
+        # create bias nodes
+        self.nodes.append(Node(self.next_node, self.config["activation_default"], 0))
         self.bias_node = self.next_node
         self.next_node += 1
 
@@ -112,56 +111,42 @@ class Genome():
         - innovation_history (list[ConnectionHistory]): List of connection histories for innovation tracking.
 
         """
-        # this will be a new number if no identical genome has mutated in the same
+        # connect the inputs nodes and outputs nodes
         for i in range(0, self.inputs):
             for j in range(0, self.outputs):
                 connection_innovation_nb = self.get_innovation_number(
                     innovation_history,
                     self.nodes[i],
-                    self.nodes[- j - 2]
+                    self.nodes[self.inputs + j]
                 )
 
                 self.genes.append(
                     ConnectionGene(
                         self.nodes[i],
-                        self.nodes[- j - 2],
+                        self.nodes[self.inputs + j],
                         self.new_connection_weight(),
                         connection_innovation_nb,
                         self.config["enabled_default"]
                     )
                 )
-
-        connection_innovation_nb = self.get_innovation_number(
-            innovation_history,
-            self.nodes[self.bias_node],
-            self.nodes[- 2]
-        )
-
-        self.genes.append(
-            ConnectionGene(
+                
+        # connect the bias nodes to outputs nodes
+        for i in range(0, self.outputs):
+            connection_innovation_nb = self.get_innovation_number(
+                innovation_history,
                 self.nodes[self.bias_node],
-                self.nodes[- 2],
-                uniform(-1.0, 1.0),
-                connection_innovation_nb,
-                self.config["enabled_default"]
+                self.nodes[self.inputs + i]
             )
-        )
-
-        connection_innovation_nb = self.get_innovation_number(
-            innovation_history,
-            self.nodes[self.bias_node],
-            self.nodes[- 3]
-        )
-
-        self.genes.append(
-            ConnectionGene(
-                self.nodes[self.bias_node],
-                self.nodes[- 3],
-                self.new_connection_weight(),
-                connection_innovation_nb,
-                self.config["enabled_default"]
+            
+            self.genes.append(
+                ConnectionGene(
+                    self.nodes[self.bias_node],
+                    self.nodes[self.inputs + i],
+                    self.new_connection_weight(),
+                    connection_innovation_nb,
+                    self.config["enabled_default"]
+                )
             )
-        )
 
         # changed this so if error here
         self.connect_nodes()
@@ -214,7 +199,7 @@ class Genome():
             self.nodes[self.bias_node].output_value = 1
 
             for n in self.network:
-                # for each node in the network engage it (see node class for what this does)
+                # for each node in the network activate it (see node class for what this does)
                 n.activate()
                 n.propagate_output()
 

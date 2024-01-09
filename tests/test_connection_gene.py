@@ -1,8 +1,5 @@
 import unittest
-from default_config import default_config
-from node import Node
-from connection_gene import ConnectionGene
-import activation_functions
+from __init__ import default_config, Node, ConnectionGene, activation_functions
 
 
 class TestConnectionGene(unittest.TestCase):
@@ -11,6 +8,16 @@ class TestConnectionGene(unittest.TestCase):
         self.from_node = Node(1, activation_functions.sigmoid, 1)
         self.to_node = Node(2, activation_functions.sigmoid, 2)
         self.gene = ConnectionGene(self.from_node, self.to_node, 0.5, 1, True)
+
+    def runTest(self):
+        self.setUp()
+        self.test_init()
+        self.setUp()
+        self.test_mutate_weight_replace()
+        self.setUp()
+        self.test_mutate_weight_mutate()
+        self.setUp()
+        self.test_clone()
 
     def test_init(self):
         self.assertEqual(self.gene.from_node, self.from_node)

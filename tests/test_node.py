@@ -1,14 +1,23 @@
 import unittest
-from default_config import default_config
-import activation_functions
-from node import Node
-from connection_gene import ConnectionGene
+from __init__ import default_config, activation_functions, Node, ConnectionGene
 
 
 class TestNode(unittest.TestCase):
     def setUp(self):
         self.config = default_config
         self.node = Node(1, "relu", 1)
+
+    def runTest(self):
+        self.setUp()
+        self.test_initialization()
+        self.setUp()
+        self.test_activation()
+        self.setUp()
+        self.test_mutate()
+        self.setUp()
+        self.test_is_connected_to()
+        self.setUp()
+        self.test_clone()
 
     def test_initialization(self):
         self.assertEqual(self.node.id, 1)
@@ -18,8 +27,8 @@ class TestNode(unittest.TestCase):
         self.assertEqual(self.node.layer, 1)
         self.assertEqual(self.node.activation_function, "relu")
 
-    def test_engage(self):
-        # Test engage method when layer is not 0
+    def test_activation(self):
+        # Test activate method when layer is not 0
         self.node.input_sum = 0.5
         self.node.activate()
         self.node.propagate_output()

@@ -1,10 +1,5 @@
 import unittest
-from default_config import default_config
-from node import Node
-from genome import Genome
-from connection_history import ConnectionHistory
-from connection_gene import ConnectionGene
-import activation_functions
+from __init__ import default_config, Node, Genome, ConnectionHistory, ConnectionGene, activation_functions
 
 
 class TestConnectionHistory(unittest.TestCase):
@@ -19,6 +14,16 @@ class TestConnectionHistory(unittest.TestCase):
         ]
         self.connection_history = ConnectionHistory(
             self.from_node, self.to_node, 1, self.innovation_nbs)
+
+    def runTest(self):
+        self.setUp()
+        self.test_init()
+        self.setUp()
+        self.test_matches_with_existing_connection()
+        self.setUp()
+        self.test_matches_with_non_existing_connection()
+        self.setUp()
+        self.test_matches_with_not_same_genome()
 
     def test_init(self):
         self.assertEqual(self.connection_history.from_node, self.from_node)

@@ -2,12 +2,7 @@ import unittest
 import os
 import tempfile
 from unittest.mock import MagicMock
-from __types__ import NeatConfig
-from default_config import default_config
-from genome import Genome
-from node import Node
-from connection_gene import ConnectionGene
-from connection_history import ConnectionHistory
+from __init__ import default_config, Genome, Node, ConnectionGene, ConnectionHistory, NeatConfig
 
 
 def assert_instance_properties_equal(test_case: unittest.TestCase, instance1, instance2, properties):
@@ -34,6 +29,28 @@ class TestGenome(unittest.TestCase):
             MagicMock(spec=ConnectionHistory, innovation_nb=4)
         ]
 
+    def runTest(self):
+        self.setUpClass()
+        self.test_init()
+        self.test_fully_connect()
+        self.test_get_node()
+        self.test_connect_nodes()
+        self.test_feed_forward()
+        self.test_generate_network()
+        self.test_add_node()
+        self.test_remove_node()
+        self.test_add_connection()
+        self.setUp()
+        self.test_remove_connection()
+        self.test_new_connection_weight()
+        self.test_get_innovation_number()
+        self.test_fully_connected()
+        self.test_mutate()
+        self.test_crossover()
+        self.test_matching_gene()
+        self.test_clone()
+        self.test_save_load()
+
     def test_init(self):
         genome = Genome(self.config)
 
@@ -56,19 +73,19 @@ class TestGenome(unittest.TestCase):
         self.assertEqual(len(genome.genes), 6)
         # First input node
         self.assertEqual(genome.genes[0].from_node.id, 0)
-        self.assertEqual(genome.genes[0].to_node.id, 3)
+        self.assertEqual(genome.genes[0].to_node.id, 2)
         self.assertEqual(genome.genes[1].from_node.id, 0)
-        self.assertEqual(genome.genes[1].to_node.id, 2)
+        self.assertEqual(genome.genes[1].to_node.id, 3)
         # Second input node
         self.assertEqual(genome.genes[2].from_node.id, 1)
-        self.assertEqual(genome.genes[2].to_node.id, 3)
+        self.assertEqual(genome.genes[2].to_node.id, 2)
         self.assertEqual(genome.genes[3].from_node.id, 1)
-        self.assertEqual(genome.genes[3].to_node.id, 2)
+        self.assertEqual(genome.genes[3].to_node.id, 3)
         # Bias node
         self.assertEqual(genome.genes[4].from_node.id, 4)
-        self.assertEqual(genome.genes[4].to_node.id, 3)
+        self.assertEqual(genome.genes[4].to_node.id, 2)
         self.assertEqual(genome.genes[5].from_node.id, 4)
-        self.assertEqual(genome.genes[5].to_node.id, 2)
+        self.assertEqual(genome.genes[5].to_node.id, 3)
 
     def test_get_node(self):
         genome = Genome(self.config)

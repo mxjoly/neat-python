@@ -4,6 +4,18 @@ from activation_functions import step, sigmoid, tanh, relu, leaky_relu, prelu, e
 
 
 class TestActivationFunctions(unittest.TestCase):
+    def runTest(self):
+        self.test_step()
+        self.test_sigmoid()
+        self.test_tanh()
+        self.test_relu()
+        self.test_leaky_relu()
+        self.test_prelu()
+        self.test_elu()
+        self.test_softmax()
+        self.test_linear()
+        self.test_swish()
+
     def test_step(self):
         self.assertEqual(step(0), 0)
         self.assertEqual(step(1), 1)

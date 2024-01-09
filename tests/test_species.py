@@ -1,11 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from default_config import default_config
-from genome import Genome
-from species import Species
-from connection_gene import ConnectionGene
-from connection_history import ConnectionHistory
-from node import Node
+from __init__ import default_config, Genome, Species, ConnectionGene, ConnectionHistory, Node
 
 
 def init_connection_history(num_inputs: int, num_outputs: int):
@@ -30,6 +25,36 @@ class TestSpecies(unittest.TestCase):
         self.connection_history = init_connection_history(10, 2)
         self.genome.fully_connect(self.connection_history)
         self.species = Species(self.genome)
+
+    def runTest(self):
+        self.setUp()
+        self.test_init()
+        self.setUp()
+        self.test_same_specie_true()
+        self.setUp()
+        self.test_same_specie_false()
+        self.setUp()
+        self.test_add_to_specie()
+        self.setUp()
+        self.test_excess_disjoint_genes()
+        self.setUp()
+        self.test_average_weight_diff()
+        self.setUp()
+        self.test_sort_genomes_stagnation_increment()
+        self.setUp()
+        self.test_sort_genomes_with_no_genomes()
+        self.setUp()
+        self.test_sort_genomes_with_new_best_genome()
+        self.setUp()
+        self.test_set_average_fitness()
+        self.setUp()
+        self.test_give_me_baby()
+        self.setUp()
+        self.test_select_genome()
+        self.setUp()
+        self.test_kill_genomes()
+        self.setUp()
+        self.test_fitness_sharing()
 
     def test_init(self):
         self.assertEqual(self.species.genomes, [self.genome])

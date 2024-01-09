@@ -3,8 +3,7 @@ from typing import TYPE_CHECKING
 from node import Node
 
 if TYPE_CHECKING:  # pragma: no cover
-    from neat.genome import Genome
-
+    from genome import Genome
 
 class ConnectionHistory():
     """
