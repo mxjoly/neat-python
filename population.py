@@ -98,6 +98,7 @@ class Population():
             self.sort_species()
             self.update_species()
             self.set_best_genome()
+            self.set_average_fitness()
             self.kill_stagnant_species()
             self.kill_bad_species()
             self.reproduce_species()
