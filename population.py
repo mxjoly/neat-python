@@ -74,6 +74,7 @@ class Population():
         temp_best = self.species[0].genomes[0]
         if temp_best.fitness >= self.best_fitness:
             self.best_genome = temp_best
+            self.best_fitness = temp_best.fitness
 
     def run(self, evaluate_genome: Callable[[Genome, int], None], nb_generations: int, callback_generation: Callable[[int], None] = None):
         """
@@ -221,6 +222,13 @@ class Population():
         for s in self.species:
             average_sum += s.average_fitness
         return average_sum
+    
+    def set_average_fitness(self) -> None:
+        """
+        Update the average fitness of the population of genomes.
+
+        """
+        self.average_fitness = self.get_average_fitness_sum() / len(self.species)
 
     def update_species(self) -> None:
         """
