@@ -29,7 +29,7 @@ generations = 100
 population.run(evaluate_genome, generations)
 ```
 
-## Customize NEAT Configuration:
+## Customize NEAT Configuration
 
 Adjust the NEAT configuration parameters in the default_config.py file to suit your specific problem and preferences.
 
