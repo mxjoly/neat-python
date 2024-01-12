@@ -474,8 +474,10 @@ class Genome():
 
         """
         is_new = True
-        global next_connection_nb
-        connection_innovation_nb = next_connection_nbinnovationin innovation_history:
+        global next_innovation_nb
+        connection_innovation_nb = next_innovation_nb
+
+        for i in innovation_history:
             # for each previous mutation
             if i.matches(self, from_node, to_node):
                 # if match found
@@ -500,7 +502,9 @@ class Genome():
                     innovation_numbers
                 )
             )
-            next_connection_nb += 1innovation connection_innovation_nb
+            next_innovation_nb += 1
+
+        return connection_innovation_nb
 
     def fully_connected(self) -> bool:
         """
