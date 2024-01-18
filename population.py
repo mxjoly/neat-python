@@ -130,6 +130,12 @@ class Population():
             if species_found == False:
                 new_species = Species(g)
                 self.species.append(new_species)
+                
+        # Remove the empty species
+        for s in self.species:
+            if len(s.genomes) == 0:
+                for g in s.genomes:
+                    self.genomes.remove(g) 
 
     def reproduce_species(self):
         """
@@ -163,11 +169,6 @@ class Population():
             g.generate_network()
         self.set_best_genome()
 
-        # Check the number of genomes for each species
-        for s in self.species:
-            if len(s.genomes) < self.config["population_size"]:
-                self.species.remove(s)
-
     def sort_species(self) -> None:
         """
         Sorts the genomes within a species and the species by their fitness.
@@ -189,6 +190,8 @@ class Population():
         """
         for s in self.species[self.config["species_elitism"]:]:
             if s.stagnation >= self.config["max_stagnation"]:
+                for g in s.genomes:
+                    self.genomes.remove(g)
                 self.species.remove(s)
 
     def kill_bad_species(self) -> None:
@@ -199,6 +202,8 @@ class Population():
         species_average_fitness = self.get_average_fitness_sum() / len(self.species)
         for s in self.species[1:]:
             if s.average_fitness < species_average_fitness * self.config["bad_species_threshold"]:
+                for g in s.genomes:
+                    self.genomes.remove(g)
                 self.species.remove(s)
 
     def reset_on_extinction(self):

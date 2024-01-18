@@ -6,13 +6,12 @@ from __init__ import default_config, Genome, Species, ConnectionGene, Connection
 def init_connection_history(num_inputs: int, num_outputs: int):
     connections: list[ConnectionHistory] = []
     innovation_nb = 0
-    innovation_nbs = [n for n in range(num_inputs * num_outputs + 1)]
     for i in range(num_inputs):
         node_input = MagicMock(spec=Node, id=i)
         for j in range(num_outputs):
             node_output = MagicMock(spec=Node, id=j)
             connections.append(ConnectionHistory(
-                from_node=node_input, to_node=node_output, innovation_nb=innovation_nb, innovation_nbs=innovation_nbs))
+                from_node=node_input, to_node=node_output, innovation_nb=innovation_nb))
             innovation_nb += 1
     return connections
 
@@ -41,8 +40,6 @@ class TestSpecies(unittest.TestCase):
         self.test_average_weight_diff()
         self.setUp()
         self.test_sort_genomes_stagnation_increment()
-        self.setUp()
-        self.test_sort_genomes_with_no_genomes()
         self.setUp()
         self.test_sort_genomes_with_new_best_genome()
         self.setUp()
@@ -128,12 +125,6 @@ class TestSpecies(unittest.TestCase):
         self.species.stagnation = 0
         self.species.sort_genomes()
         self.assertEqual(self.species.stagnation, 1)
-
-    def test_sort_genomes_with_no_genomes(self):
-        self.species.stagnation = 0
-        self.species.genomes = []
-        self.species.sort_genomes()
-        self.assertEqual(self.species.stagnation, 200)
 
     def test_sort_genomes_with_new_best_genome(self):
         self.species.stagnation = 100

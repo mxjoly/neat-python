@@ -479,7 +479,7 @@ class Genome():
 
         for i in innovation_history:
             # for each previous mutation
-            if i.matches(self, from_node, to_node):
+            if i.matches(from_node, to_node):
                 # if match found
                 is_new = False  # its not a new mutation
                 # set the innovation number as the innovation number of the match
@@ -487,19 +487,12 @@ class Genome():
                 break
 
         if is_new:
-            # if the mutation is new then create an arrayList of connections history representing the current state of the genome
-            innovation_numbers: list[int] = []
-            for g in self.genes:
-                # set the innovation numbers
-                innovation_numbers.append(g.innovation_nb)
-
             # then add this mutation to the innovationHistory
             innovation_history.append(
                 ConnectionHistory(
                     from_node,
                     to_node,
-                    connection_innovation_nb,
-                    innovation_numbers
+                    connection_innovation_nb
                 )
             )
             next_innovation_nb += 1

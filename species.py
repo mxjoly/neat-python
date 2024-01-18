@@ -157,10 +157,6 @@ class Species():
         # Sort the genomes by their fitness
         self.genomes.sort(key=get_fitness, reverse=True)
 
-        if len(self.genomes) == 0:
-            self.stagnation = 200
-            return
-
         if self.genomes[0].fitness > self.best_fitness:
             self.stagnation = 0
             self.best_fitness = self.genomes[0].fitness

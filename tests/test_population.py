@@ -135,30 +135,67 @@ class TestPopulation(unittest.TestCase):
 
     def test_kill_stagnant_species(self):
         population = Population(self.config)
+        
+        # Mock genomes
+        genome1 = Genome(self.config)
+        genome2 = Genome(self.config)
+        genome3 = Genome(self.config)
+        genome4 = Genome(self.config)
 
         # Mock species
-        species_to_keep = [MagicMock(spec=Species, stagnation=2), MagicMock(
-            spec=Species, stagnation=4)]
-        species_to_remove = [
-            MagicMock(spec=Species, stagnation=6), MagicMock(spec=Species, stagnation=8)]
-        population.species = species_to_keep + species_to_remove
+        species_to_keep1 = Species(genome1)
+        species_to_keep2 = Species(genome2)
+        species_to_remove1 = Species(genome3)
+        species_to_remove2 = Species(genome4)
+        
+        # Set stagnation of the species
+        species_to_keep1.stagnation = 2
+        species_to_keep2.stagnation = 4
+        species_to_remove1.stagnation = 6
+        species_to_remove2.stagnation = 8
+        
+        population.genomes = [genome1, genome2, genome3, genome4]
+        population.species = [species_to_keep1, species_to_keep2, species_to_remove1, species_to_remove2]
 
         # Run killing stagnant species
         population.kill_stagnant_species()
 
         # Assert stagnant species are removed
-        self.assertEqual(population.species, species_to_keep)
+        self.assertTrue(species_to_keep1 in population.species)
+        self.assertTrue(species_to_keep2 in population.species)
+        self.assertTrue(species_to_remove1 not in population.species)
+        self.assertTrue(species_to_remove2 not in population.species)
+        
+        # Assert the genomes of the stagnant species are removed
+        self.assertTrue(genome1 in population.genomes)
+        self.assertTrue(genome2 in population.genomes)
+        self.assertTrue(genome3 not in population.genomes)
+        self.assertTrue(genome4 not in population.genomes)
 
     def test_kill_bad_species(self):
         population = Population(self.config)
-
+        
+        # Mock genomes
+        genome1 = Genome(self.config)
+        genome2 = Genome(self.config)
+        genome3 = Genome(self.config)
+        
         # Mock species
-        good_species = MagicMock(
-            spec=Species, average_fitness=self.config["bad_species_threshold"] + 1)
-        bad_species1 = MagicMock(
-            spec=Species, average_fitness=self.config["bad_species_threshold"] - 1)
-        bad_species2 = MagicMock(
-            spec=Species, average_fitness=self.config["bad_species_threshold"] - 2)
+        good_species = Species(genome1)
+        bad_species1 = Species(genome2)
+        bad_species2 = Species(genome3)
+        
+        # Mock average fitness
+        average_fitness1 = 100.0
+        average_fitness2 = 3.0
+        average_fitness3 = 1.0
+        
+        # Set average fitness
+        good_species.average_fitness = average_fitness1
+        bad_species1.average_fitness = average_fitness2
+        bad_species2.average_fitness = average_fitness3
+
+        population.genomes = [genome1, genome2, genome3]
         population.species = [good_species, bad_species1, bad_species2]
 
         # Run killing bad species
@@ -166,6 +203,11 @@ class TestPopulation(unittest.TestCase):
 
         # Assert bad species are removed
         self.assertEqual(population.species, [good_species])
+        
+        # Assert genomes are correctly removed
+        self.assertTrue(genome1 in population.genomes)
+        self.assertTrue(genome2 not in population.genomes)
+        self.assertTrue(genome3 not in population.genomes)
 
     def test_reset_on_extinction(self):
         population = Population(self.config)
