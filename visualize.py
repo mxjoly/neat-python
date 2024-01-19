@@ -28,9 +28,12 @@ def plot_population_history(population_history: "dict[int, Population]", filenam
 
     nb_generations = len(population_history.keys())
     generations = range(nb_generations)
-    best_fitness = numpy.array([population_history[g].best_fitness for g in range(nb_generations)])
-    avg_fitness = numpy.array([population_history[g].average_fitness for g in range(nb_generations)])
-    stdev_fitness = numpy.array([stdev([genome.fitness for genome in population_history[g].genomes]) for g in range(nb_generations)])
+    best_fitness = numpy.array(
+        [population_history[g].best_fitness for g in range(nb_generations)])
+    avg_fitness = numpy.array(
+        [population_history[g].average_fitness for g in range(nb_generations)])
+    stdev_fitness = numpy.array([stdev(
+        [genome.fitness for genome in population_history[g].genomes]) for g in range(nb_generations)])
 
     plt.plot(generations, avg_fitness, 'b-', label="average")
     plt.plot(generations, avg_fitness - stdev_fitness, 'g-.', label="-1 std")
@@ -42,6 +45,50 @@ def plot_population_history(population_history: "dict[int, Population]", filenam
     plt.ylabel("Fitness")
     plt.grid()
     plt.legend(loc="best")
+    if ylog:
+        plt.gca().set_yscale('symlog')
+
+    plt.savefig(filename)
+    if view:  # pragma: no cover
+        plt.show()
+
+    plt.close()
+
+
+def plot_species(population_history: "dict[int, Population]", filename: str, ylog=False, view=False):
+    """ 
+    Visualizes speciation throughout evolution. 
+
+    Parameters:
+    - population_history (dict[int, Population]): A dictionary containing the historical records of Population for each generation.
+    - filename (str): The filename (including path and extension) to save the plot.
+    - ylog (bool): Flag to indicate whether to use a logarithmic scale on the y-axis. Default is False.
+    - view (bool): Flag to indicate whether to display the plot interactively. Default is False.
+
+    Returns:
+    - None
+    """
+    if plt is None:
+        warnings.warn(
+            "This display is not available due to a missing optional dependency (matplotlib)")
+        return
+
+    nb_generations = len(population_history.keys())
+    num_species_per_generation = []
+
+    for i in range(nb_generations):
+        num_species_per_generation.append(len(population_history[i].species))
+
+    plt.plot(range(1, nb_generations + 1), [[n]
+             for n in num_species_per_generation])
+
+    # Set integer ticks on the x and y axes
+    plt.yticks(range(0, max(num_species_per_generation) + 1))
+    plt.xticks(range(1, nb_generations + 1))
+
+    plt.xlabel("Generation")
+    plt.ylabel("Number of species")
+    plt.title('Evolution of species')
     if ylog:
         plt.gca().set_yscale('symlog')
 

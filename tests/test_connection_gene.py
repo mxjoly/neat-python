@@ -43,11 +43,5 @@ class TestConnectionGene(unittest.TestCase):
         self.assertFalse(self.gene.enabled)
 
     def test_clone(self):
-        cloned_connection_gene = self.gene.clone(self.from_node, self.to_node)
-        self.assertEqual(cloned_connection_gene.from_node, self.from_node)
-        self.assertEqual(cloned_connection_gene.to_node, self.to_node)
-        self.assertEqual(cloned_connection_gene.weight, self.gene.weight)
-        self.assertEqual(cloned_connection_gene.innovation_nb,
-                         self.gene.innovation_nb)
-        self.assertEqual(cloned_connection_gene.enabled,
-                         self.gene.enabled)
+        cloned_gene = self.gene.clone(self.from_node, self.to_node)
+        self.assertTrue(cloned_gene.is_equal(self.gene))

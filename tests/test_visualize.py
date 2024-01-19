@@ -3,8 +3,8 @@ import os
 import tempfile
 import shutil
 from unittest.mock import patch, MagicMock
-from visualize import plot_population_history, plot_genome
-from __init__ import Population, Genome, default_config
+from visualize import plot_population_history, plot_genome, plot_species
+from __init__ import Population, Species, Genome, Node, ConnectionGene, default_config
 
 
 class TestVisualization(unittest.TestCase):
@@ -22,6 +22,7 @@ class TestVisualization(unittest.TestCase):
     def runTest(self):
         self.setUpClass()
         self.test_plot_population_history()
+        self.test_plot_species()
         self.test_plot_genome()
         self.tearDownClass()
 
@@ -43,12 +44,27 @@ class TestVisualization(unittest.TestCase):
         self.assertTrue(os.path.exists(filename))
 
     @patch('graphviz.Digraph')
+    def test_plot_species(self, mock_pyplot):
+        # Set up population history
+        population_history = {
+            0: MagicMock(spec=Population, species=[MagicMock(spec=Species, genomes=[MagicMock(spec=Genome)]), MagicMock(spec=Species, genomes=[MagicMock(spec=Genome)])]),
+            1: MagicMock(spec=Population, species=[MagicMock(spec=Species, genomes=[MagicMock(spec=Genome), MagicMock(spec=Genome)]), MagicMock(spec=Species, genomes=[MagicMock(spec=Genome)])]),
+            2: MagicMock(spec=Population, species=[MagicMock(spec=Species, genomes=[MagicMock(spec=Genome)]), MagicMock(spec=Species, genomes=[MagicMock(spec=Genome)])]),
+
+        }
+        filename = os.path.join(self.test_dir, "test_plot.png")
+
+        # Call the plot_species function
+        plot_species(population_history, filename)
+
+        # Assertions
+        self.assertTrue(os.path.exists(filename))
+
+    @patch('graphviz.Digraph')
     def test_plot_genome(self, mock_digraph):
         # Mock Genome class
-        genome_mock = MagicMock(spec=Genome)
-        genome_mock.nodes = [MagicMock(id=0, layer=0)]
-        genome_mock.genes = [MagicMock(from_node=MagicMock(
-            id=0), to_node=MagicMock(id=1), weight=0.5, enabled=True)]
+        genome_mock = MagicMock(spec=Genome, nodes=[MagicMock(spec=Node, id=0, layer=0)], genes=[
+                                MagicMock(spec=ConnectionGene, from_node=MagicMock(spec=Node, id=0), to_node=MagicMock(spec=Node, id=1), weight=0.5, enabled=True)])
         filename = os.path.join(self.test_dir, "test_genome.png")
 
         # Call the plot_genome function

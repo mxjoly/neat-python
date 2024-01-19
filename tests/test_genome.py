@@ -244,10 +244,7 @@ class TestGenome(unittest.TestCase):
         clone = genome.clone()
 
         # Check if cloning the genome produces a valid clone
-        self.assertIsInstance(clone, Genome)
-        self.assertIsNot(clone, genome)
-        self.assertEqual(len(clone.genes), len(genome.genes))
-        self.assertEqual(len(clone.nodes), len(genome.nodes))
+        self.assertTrue(clone.is_equal(genome))
 
     def test_save_load(self):
         genome = Genome(self.config)

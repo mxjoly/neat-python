@@ -86,7 +86,4 @@ class TestNode(unittest.TestCase):
     def test_clone(self):
         cloned_node = self.node.clone()
         # Validate that the cloned node is a separate instance
-        self.assertIsNot(self.node, cloned_node)
-        # Validate that the cloned node has the same attributes
-        self.assertEqual(self.node.id, cloned_node.id)
-        self.assertEqual(self.node.layer, cloned_node.layer)
+        self.assertTrue(cloned_node.is_equal(self.node))

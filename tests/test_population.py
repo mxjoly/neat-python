@@ -52,8 +52,6 @@ class TestPopulation(unittest.TestCase):
         self.setUp()
         self.test_update_species()
         self.setUp()
-        self.test_get_genome()
-        self.setUp()
         self.test_clone()
 
     def test_population_initialization(self):
@@ -137,7 +135,7 @@ class TestPopulation(unittest.TestCase):
 
     def test_kill_stagnant_species(self):
         population = Population(self.config)
-        
+
         # Mock genomes
         genome1 = Genome(self.config)
         genome2 = Genome(self.config)
@@ -149,15 +147,16 @@ class TestPopulation(unittest.TestCase):
         species_to_keep2 = Species(genome2)
         species_to_remove1 = Species(genome3)
         species_to_remove2 = Species(genome4)
-        
+
         # Set stagnation of the species
         species_to_keep1.stagnation = 2
         species_to_keep2.stagnation = 4
         species_to_remove1.stagnation = 6
         species_to_remove2.stagnation = 8
-        
+
         population.genomes = [genome1, genome2, genome3, genome4]
-        population.species = [species_to_keep1, species_to_keep2, species_to_remove1, species_to_remove2]
+        population.species = [
+            species_to_keep1, species_to_keep2, species_to_remove1, species_to_remove2]
 
         # Run killing stagnant species
         population.kill_stagnant_species()
@@ -167,7 +166,7 @@ class TestPopulation(unittest.TestCase):
         self.assertTrue(species_to_keep2 in population.species)
         self.assertTrue(species_to_remove1 not in population.species)
         self.assertTrue(species_to_remove2 not in population.species)
-        
+
         # Assert the genomes of the stagnant species are removed
         self.assertTrue(genome1 in population.genomes)
         self.assertTrue(genome2 in population.genomes)
@@ -176,22 +175,22 @@ class TestPopulation(unittest.TestCase):
 
     def test_kill_bad_species(self):
         population = Population(self.config)
-        
+
         # Mock genomes
         genome1 = Genome(self.config)
         genome2 = Genome(self.config)
         genome3 = Genome(self.config)
-        
+
         # Mock species
         good_species = Species(genome1)
         bad_species1 = Species(genome2)
         bad_species2 = Species(genome3)
-        
+
         # Mock average fitness
         average_fitness1 = 100.0
         average_fitness2 = 3.0
         average_fitness3 = 1.0
-        
+
         # Set average fitness
         good_species.average_fitness = average_fitness1
         bad_species1.average_fitness = average_fitness2
@@ -205,7 +204,7 @@ class TestPopulation(unittest.TestCase):
 
         # Assert bad species are removed
         self.assertEqual(population.species, [good_species])
-        
+
         # Assert genomes are correctly removed
         self.assertTrue(genome1 in population.genomes)
         self.assertTrue(genome2 not in population.genomes)
@@ -239,24 +238,10 @@ class TestPopulation(unittest.TestCase):
         # Assert species is updated
         self.assertEqual(len(species.genomes), self.config["min_species_size"])
 
-    def test_get_genome(self):
-        population = Population(self.config)
-
-        # Mock genomes
-        genome1 = MagicMock(spec=Genome, id="1")
-        genome2 = MagicMock(spec=Genome, id="2")
-        population.genomes = [genome1, genome2]
-
-        # Run getting genome by id
-        result_genome = population.get_genome("2")
-
-        # Assert correct genome is returned
-        self.assertEqual(result_genome, genome2)
-        
     def test_clone(self):
         population = Population(self.config)
         clone = population.clone()
-        
+
         clone.genomes = population.genomes.copy()
         clone.species = population.species.copy()
         clone.generation = population.generation
@@ -265,14 +250,14 @@ class TestPopulation(unittest.TestCase):
         if (population.best_genome):
             clone.best_genome = population.best_genome.clone()
         clone.innovation_history = population.innovation_history
-        
+
         # Asserts the clone is valid
         for i in range(len(clone.genomes)):
             self.assertTrue(clone.genomes[i].is_equal(population.genomes[i]))
         for i in range(len(clone.species)):
-            self.assertTrue(clone.species[i].is_equal(population.species[i]))   
+            self.assertTrue(clone.species[i].is_equal(population.species[i]))
         if (population.best_genome):
-            self.assertTrue(clone.best_genome.is_equal(population.best_genome))         
+            self.assertTrue(clone.best_genome.is_equal(population.best_genome))
         self.assertEqual(clone.generation, population.generation)
         self.assertEqual(clone.average_fitness, population.average_fitness)
         self.assertEqual(clone.best_fitness, population.best_fitness)

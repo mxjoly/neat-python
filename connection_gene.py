@@ -67,19 +67,19 @@ class ConnectionGene():
 
         if random() < config["enabled_mutate_rate"]:
             self.enabled = False if self.enabled else True
-            
+
     def is_equal(self, other: ConnectionGene):
         """
         Compare two connection genes.
-        
+
         Args:
             other (ConnectionGene): An other connection gene to compare with it.
 
         Returns:
             bool: True if the connection genes are equals, otherwise false.
-        
-        """ 
-        return self.from_node == other.from_node and self.to_node == other.to_node and self.weight == other.weight and self.innovation_nb == other.innovation_nb and self.enabled == other.enabled
+
+        """
+        return self.from_node.id == other.from_node.id and self.to_node.id == other.to_node.id and self.weight == other.weight and self.innovation_nb == other.innovation_nb and self.enabled == other.enabled
 
     def clone(self, from_node: Node, to_node: Node):
         """

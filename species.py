@@ -32,10 +32,11 @@ class Species():
     - kill_genomes(self, config: NeatConfig) -> None: Kill a part of the species based on a survival threshold.
     - fitness_sharing(self) -> None: Apply fitness sharing to protect unique genomes.
     - is_equal(other: Species) -> bool: Compare two species.
+    - clone() -> Species: Return a copy of this node. 
 
     """
 
-    def __init__(self, genome: Genome) -> None:
+    def __init__(self, genome: Genome = None) -> None:
         """
         Initialize a Species instance.
 
@@ -246,7 +247,7 @@ class Species():
         """
         for g in self.genomes:
             g.fitness /= len(self.genomes)
-            
+
     def is_equal(self, other: Species):
         """
         Compare two species.
@@ -257,16 +258,33 @@ class Species():
         Returns:
             bool: True if the species are equals, otherwise false.
         """
-        
+
         def get_genome_id(genome: Genome):
             return genome.id
-        
+
         self.genomes.sort(key=get_genome_id)
         other.genomes.sort(key=get_genome_id)
-        
+
         # Compare the genomes
-        for i in range (len(self.genomes)):
+        for i in range(len(self.genomes)):
             if self.genomes[i].is_equal(other.genomes[i]):
                 return False
-            
+
         return self.champion.is_equal(other.champion) and self.average_fitness == other.average_fitness and self.best_fitness == other.best_fitness
+
+    def clone(self):
+        """
+        Return a copy of this species.
+
+        Returns:
+        - Node: A copy of this species.
+
+        """
+        clone = Species()
+        clone.champion = self.champion.clone()
+        clone.average_fitness = self.average_fitness
+        clone.best_fitness = self.best_fitness
+        clone.stagnation = self.stagnation
+        for g in self.genomes:
+            clone.add_to_species(g)
+        return clone

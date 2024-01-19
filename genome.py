@@ -55,9 +55,9 @@ class Genome():
     - fully_connected() -> bool: Check if the network is fully connected.
     - mutate(innovation_history: list[ConnectionHistory]) -> None: Mutate the genome.
     - crossover(parent: Genome) -> Genome: Perform crossover with another parent genome.
-    - is_equal(other: Genome) -> bool: Compare two genomes.
     - matching_gene(parent: Genome, innovation: int) -> int: Check if there is a gene matching the input innovation number in the parent genome.
     - print_genome() -> None: Print information about the genome to the console.
+    - is_equal(other: Genome) -> bool: Compare two genomes.
     - clone() -> Genome: Return a copy of this genome.
     - save(file_path: str) -> None: Save the genome to a file.
     - load(file_path: str) -> Genome: Load a genome from a file.
@@ -100,7 +100,8 @@ class Genome():
             self.next_node += 1
 
         # create bias nodes
-        self.nodes.append(Node(self.next_node, self.config["activation_default"], 0))
+        self.nodes.append(
+            Node(self.next_node, self.config["activation_default"], 0))
         self.bias_node = self.next_node
         self.next_node += 1
 
@@ -130,7 +131,7 @@ class Genome():
                         self.config["enabled_default"]
                     )
                 )
-                
+
         # connect the bias nodes to outputs nodes
         for i in range(0, self.outputs):
             connection_innovation_nb = self.get_innovation_number(
@@ -138,7 +139,7 @@ class Genome():
                 self.nodes[self.bias_node],
                 self.nodes[self.inputs + i]
             )
-            
+
             self.genes.append(
                 ConnectionGene(
                     self.nodes[self.bias_node],
@@ -624,51 +625,6 @@ class Genome():
 
         child.connect_nodes()
         return child
-    
-    def is_equal(self, other: Genome):
-        """
-        Compare two genomes.
-
-        Args:
-            other (Genome): The other genome to compare with it
-
-        Returns:
-            bool: True if the genome are equals, otherwise false.
-        """
-        
-        # Compare the number of nodes
-        if len(self.nodes) != len(other.nodes):
-            return False
-        
-        # Compare the number of genes
-        if len(self.genes) != len(other.genes):
-            return False
-        
-        # Compare each node
-        
-        def get_node_id(node: Node):
-            return node.id
-        
-        self.nodes.sort(key=get_node_id)
-        other.nodes.sort(key=get_node_id)
-        
-        for i in range(len(self.nodes)):
-            if not self.nodes[i].is_equal(other.nodes[i]):
-                return False
-
-        # Compare each gene
-        
-        def get_gene_innovation_nb(gene: ConnectionGene):
-            return gene.innovation_nb
-        
-        self.genes.sort(key=get_gene_innovation_nb)
-        other.genes.sort(key=get_gene_innovation_nb) 
-        
-        for i in range(len(self.genes)):
-            if not self.genes[i].is_equal(other.genes[i]):
-                return False
-            
-        return True
 
     def matching_gene(self, parent: Genome, innovation: int):
         """
@@ -714,10 +670,55 @@ class Genome():
         ------------------------------ {colored("GENOME", attrs=["bold"])} ----------------------------
         {colored("⚪️ Resume:", attrs=["bold"])}
         {colored('{layers', attrs=["bold"]) + ": " + str(self.layers) + ", " + colored('bias nodes', attrs=["bold"]) + ": " +
-              str(self.bias_node) + ", " + colored('nodes', attrs=["bold"]) + ": " + str(len(self.nodes)) + "}"}
+                str(self.bias_node) + ", " + colored('nodes', attrs=["bold"]) + ": " + str(len(self.nodes)) + "}"}
         {colored("⚪️ Connection genes:", attrs=["bold"])}
         {str_genes}
         ''')
+
+    def is_equal(self, other: Genome):
+        """
+        Compare two genomes.
+
+        Args:
+            other (Genome): The other genome to compare with it
+
+        Returns:
+            bool: True if the genome are equals, otherwise false.
+        """
+
+        # Compare the number of nodes
+        if len(self.nodes) != len(other.nodes):
+            return False
+
+        # Compare the number of genes
+        if len(self.genes) != len(other.genes):
+            return False
+
+        # Compare each node
+
+        def get_node_id(node: Node):
+            return node.id
+
+        self.nodes.sort(key=get_node_id)
+        other.nodes.sort(key=get_node_id)
+
+        for i in range(len(self.nodes)):
+            if not self.nodes[i].is_equal(other.nodes[i]):
+                return False
+
+        # Compare each gene
+
+        def get_gene_innovation_nb(gene: ConnectionGene):
+            return gene.innovation_nb
+
+        self.genes.sort(key=get_gene_innovation_nb)
+        other.genes.sort(key=get_gene_innovation_nb)
+
+        for i in range(len(self.genes)):
+            if not self.genes[i].is_equal(other.genes[i]):
+                return False
+
+        return True
 
     def clone(self):
         """

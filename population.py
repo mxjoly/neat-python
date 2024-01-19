@@ -37,7 +37,6 @@ class Population():
     - get_average_fitness_sum() -> float: Returns the sum of each species' average fitness.
     - set_average_fitness() -> None: Update the average fitness for all species.
     - update_species() -> None: Update the species for the next generation.
-    - get_genome(id: str) -> Genome: Get a genome by its ID.
     - clone() -> Population: Return a copy of this population.
 
     """
@@ -132,12 +131,12 @@ class Population():
             if species_found == False:
                 new_species = Species(g)
                 self.species.append(new_species)
-                
+
         # Remove the empty species
         for s in self.species:
             if len(s.genomes) == 0:
                 for g in s.genomes:
-                    self.genomes.remove(g) 
+                    self.genomes.remove(g)
 
     def reproduce_species(self):
         """
@@ -230,7 +229,7 @@ class Population():
         for s in self.species:
             average_sum += s.average_fitness
         return average_sum
-    
+
     def set_average_fitness(self) -> None:
         """
         Update the average fitness of the population of genomes.
@@ -248,21 +247,6 @@ class Population():
             s.fitness_sharing()
             s.set_average_fitness()
 
-    def get_genome(self, id: str) -> Genome:
-        """
-        Get a genome by its ID.
-
-        Args:
-        - id (str): ID of the genome.
-
-        Returns:
-        - Genome: The genome with the specified ID.
-
-        """
-        for genome in self.genomes:
-            if genome.id == id:
-                return genome
-            
     def clone(self) -> Population:
         """
         Return a copy of this population.
@@ -271,12 +255,24 @@ class Population():
             Population: A copy of the population
         """
         clone = Population(self.config)
-        clone.genomes = self.genomes.copy()
-        clone.species = self.species.copy()
+        clone.genomes = []
+        clone.species = []
+
+        # Clone the species
+        for s in self.species:
+            clone.species.append(s.clone())
+
+        # Add the genomes of cloned species to the population
+        for s in self.species:
+            for g in s.genomes:
+                clone.genomes.append(g)
+
         clone.generation = self.generation
         clone.average_fitness = self.average_fitness
         clone.best_fitness = self.best_fitness
         clone.innovation_history = self.innovation_history
+
         if self.best_genome:
             clone.best_genome = self.best_genome.clone()
+
         return clone
