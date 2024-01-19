@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from __init__ import default_config, Genome, Species, ConnectionGene, ConnectionHistory, Node
+from __init__ import default_config, Genome, Species, ConnectionHistory, Node
 
 
 def init_connection_history(num_inputs: int, num_outputs: int):

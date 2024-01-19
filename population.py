@@ -1,3 +1,4 @@
+from __future__ import annotations
 import math
 from typing import Callable
 from multiprocessing.pool import ThreadPool
@@ -34,18 +35,19 @@ class Population():
     - kill_bad_species() -> None: Kill species with fitness below a threshold.
     - reset_on_extinction() -> None: Reset the population if all species become extinct due to stagnation.
     - get_average_fitness_sum() -> float: Returns the sum of each species' average fitness.
+    - set_average_fitness() -> None: Update the average fitness for all species.
     - update_species() -> None: Update the species for the next generation.
     - get_genome(id: str) -> Genome: Get a genome by its ID.
+    - clone() -> Return a copy of this population.
 
     """
 
-    def __init__(self, config: NeatConfig, display_progress=False) -> None:
+    def __init__(self, config: NeatConfig) -> None:
         """
         Initialize a Population instance.
 
         Args:
         - config (NeatConfig): NEAT configuration settings.
-        - display_progress (bool): Flag to display progress (default is False).
 
         """
         self.config = config
@@ -260,3 +262,19 @@ class Population():
         for genome in self.genomes:
             if genome.id == id:
                 return genome
+            
+    def clone(self) -> Population:
+        """
+        Return a copy of this population.
+
+        Returns:
+            Population: A copy of the population
+        """
+        clone =  Population(self.config)
+        clone.genomes = self.genomes.copy()
+        clone.generation = self.generation
+        clone.average_fitness = self.average_fitness
+        clone.best_fitness = self.best_fitness
+        clone.best_genome = self.best_genome.clone()
+        clone.innovation_history = self.innovation_history
+        return clone

@@ -24,6 +24,7 @@ class TestConnectionHistory(unittest.TestCase):
     def test_init(self):
         self.assertEqual(self.connection_history.from_node, self.from_node)
         self.assertEqual(self.connection_history.to_node, self.to_node)
+        self.assertEqual(self.connection_history.innovation_nb, 1)
 
     def test_matches_with_existing_connection(self):
         result = self.connection_history.matches(self.from_node, self.to_node)

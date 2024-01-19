@@ -6,6 +6,7 @@ from tests.test_connection_history import TestConnectionHistory
 from tests.test_population import TestPopulation
 from tests.test_node import TestNode
 from tests.test_species import TestSpecies
+from tests.test_visualize import TestVisualization
 
 
 def test_suite():
@@ -17,7 +18,8 @@ def test_suite():
         TestConnectionHistory(),
         TestPopulation(),
         TestNode(),
-        TestSpecies()
+        TestSpecies(),
+        TestVisualization()
     ])
     return suite
 
