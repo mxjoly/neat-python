@@ -242,15 +242,6 @@ class TestPopulation(unittest.TestCase):
         population = Population(self.config)
         clone = population.clone()
 
-        clone.genomes = population.genomes.copy()
-        clone.species = population.species.copy()
-        clone.generation = population.generation
-        clone.average_fitness = population.average_fitness
-        clone.best_fitness = population.best_fitness
-        if (population.best_genome):
-            clone.best_genome = population.best_genome.clone()
-        clone.innovation_history = population.innovation_history
-
         # Asserts the clone is valid
         for i in range(len(clone.genomes)):
             self.assertTrue(clone.genomes[i].is_equal(population.genomes[i]))
