@@ -1,7 +1,7 @@
 from __future__ import annotations
 from random import random, choice
 from numpy.random import uniform, normal
-from __types__ import NeatConfig, ActivationFunctions
+from __init__ import NeatConfig, ActivationFunctions
 import activation_functions as activation_functions
 
 
@@ -25,6 +25,7 @@ class Node():
     - propagate_output() -> None: Propagate the output to connected nodes.
     - mutate(config: NeatConfig, is_bias_node: bool = False) -> None: Mutate the node's properties based on the NEAT configuration.
     - is_connected_to(node: Node) -> bool: Check if this node is connected to the specified node.
+    - is_equal(other: Node) -> bool: Compare two nodes. 
     - clone() -> Node: Return a copy of this node.
 
     """
@@ -145,6 +146,29 @@ class Node():
                     return True
 
         return False
+    
+    def is_equal(self, other: Node):
+        """
+        Compare two nodes.
+        
+        Args:
+            other (Node): An other node to compare with it.
+
+        Returns:
+            bool: True if the nodes are equals, otherwise false.
+        """
+        if self.id != other.id or self.activation_function != other.activation_function or self.layer != other.layer:
+            return False
+        
+        for c1 in self.output_connections:
+            found = False
+            for c2 in other.output_connections:
+                if c1.is_equal(c2):
+                    found = True
+            if not found:
+                return False
+            
+        return True
 
     def clone(self) -> Node:
         """

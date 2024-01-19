@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from __init__ import default_config, Population, Genome, NeatConfig, ConnectionHistory, Species, Node
+from __init__ import default_config, Population, Genome, ConnectionHistory, Species, Node
 from random import randrange
 
 
@@ -53,6 +53,8 @@ class TestPopulation(unittest.TestCase):
         self.test_update_species()
         self.setUp()
         self.test_get_genome()
+        self.setUp()
+        self.test_clone()
 
     def test_population_initialization(self):
         population = Population(self.config)
@@ -250,3 +252,28 @@ class TestPopulation(unittest.TestCase):
 
         # Assert correct genome is returned
         self.assertEqual(result_genome, genome2)
+        
+    def test_clone(self):
+        population = Population(self.config)
+        clone = population.clone()
+        
+        clone.genomes = population.genomes.copy()
+        clone.species = population.species.copy()
+        clone.generation = population.generation
+        clone.average_fitness = population.average_fitness
+        clone.best_fitness = population.best_fitness
+        if (population.best_genome):
+            clone.best_genome = population.best_genome.clone()
+        clone.innovation_history = population.innovation_history
+        
+        # Asserts the clone is valid
+        for i in range(len(clone.genomes)):
+            self.assertTrue(clone.genomes[i].is_equal(population.genomes[i]))
+        for i in range(len(clone.species)):
+            self.assertTrue(clone.species[i].is_equal(population.species[i]))   
+        if (population.best_genome):
+            self.assertTrue(clone.best_genome.is_equal(population.best_genome))         
+        self.assertEqual(clone.generation, population.generation)
+        self.assertEqual(clone.average_fitness, population.average_fitness)
+        self.assertEqual(clone.best_fitness, population.best_fitness)
+        self.assertEqual(clone.generation, population.generation)

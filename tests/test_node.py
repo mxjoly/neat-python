@@ -1,5 +1,5 @@
 import unittest
-from __init__ import default_config, activation_functions, Node, ConnectionGene
+from __init__ import default_config, Node, ConnectionGene
 
 
 class TestNode(unittest.TestCase):

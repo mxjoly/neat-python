@@ -8,6 +8,7 @@ class TestConnectionHistory(unittest.TestCase):
         self.genome = Genome(self.config)
         self.from_node = Node(1, activation_functions.sigmoid, 1)
         self.to_node = Node(2, activation_functions.sigmoid, 2)
+        self.innovation_nbs = [1]
         self.genome.genes = [
             ConnectionGene(self.from_node, self.to_node, 0.5, 1, True)
         ]

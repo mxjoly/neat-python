@@ -1,6 +1,7 @@
+from __future__ import annotations
 import math
 from random import random
-from __types__ import NeatConfig
+from __init__ import NeatConfig
 from genome import Genome
 from connection_history import ConnectionHistory
 
@@ -30,6 +31,7 @@ class Species():
     - select_genome(self) -> Genome: Select a genome from the species based on its fitness.
     - kill_genomes(self, config: NeatConfig) -> None: Kill a part of the species based on a survival threshold.
     - fitness_sharing(self) -> None: Apply fitness sharing to protect unique genomes.
+    - is_equal(other: Species) -> bool: Compare two species.
 
     """
 
@@ -244,3 +246,27 @@ class Species():
         """
         for g in self.genomes:
             g.fitness /= len(self.genomes)
+            
+    def is_equal(self, other: Species):
+        """
+        Compare two species.
+
+        Args:
+            other (Species): The other species to compare with it
+
+        Returns:
+            bool: True if the species are equals, otherwise false.
+        """
+        
+        def get_genome_id(genome: Genome):
+            return genome.id
+        
+        self.genomes.sort(key=get_genome_id)
+        other.genomes.sort(key=get_genome_id)
+        
+        # Compare the genomes
+        for i in range (len(self.genomes)):
+            if self.genomes[i].is_equal(other.genomes[i]):
+                return False
+            
+        return self.champion.is_equal(other.champion) and self.average_fitness == other.average_fitness and self.best_fitness == other.best_fitness

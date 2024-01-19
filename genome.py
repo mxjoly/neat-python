@@ -7,7 +7,7 @@ import secrets
 from termcolor import colored
 from numpy.random import normal, uniform
 from random import random, randrange, choice
-from __types__ import NeatConfig
+from __init__ import NeatConfig
 from node import Node
 from connection_gene import ConnectionGene
 from connection_history import ConnectionHistory
@@ -55,6 +55,7 @@ class Genome():
     - fully_connected() -> bool: Check if the network is fully connected.
     - mutate(innovation_history: list[ConnectionHistory]) -> None: Mutate the genome.
     - crossover(parent: Genome) -> Genome: Perform crossover with another parent genome.
+    - is_equal(other: Genome) -> bool: Compare two genomes.
     - matching_gene(parent: Genome, innovation: int) -> int: Check if there is a gene matching the input innovation number in the parent genome.
     - print_genome() -> None: Print information about the genome to the console.
     - clone() -> Genome: Return a copy of this genome.
@@ -623,6 +624,51 @@ class Genome():
 
         child.connect_nodes()
         return child
+    
+    def is_equal(self, other: Genome):
+        """
+        Compare two genomes.
+
+        Args:
+            other (Genome): The other genome to compare with it
+
+        Returns:
+            bool: True if the genome are equals, otherwise false.
+        """
+        
+        # Compare the number of nodes
+        if len(self.nodes) != len(other.nodes):
+            return False
+        
+        # Compare the number of genes
+        if len(self.genes) != len(other.genes):
+            return False
+        
+        # Compare each node
+        
+        def get_node_id(node: Node):
+            return node.id
+        
+        self.nodes.sort(key=get_node_id)
+        other.nodes.sort(key=get_node_id)
+        
+        for i in range(len(self.nodes)):
+            if not self.nodes[i].is_equal(other.nodes[i]):
+                return False
+
+        # Compare each gene
+        
+        def get_gene_innovation_nb(gene: ConnectionGene):
+            return gene.innovation_nb
+        
+        self.genes.sort(key=get_gene_innovation_nb)
+        other.genes.sort(key=get_gene_innovation_nb) 
+        
+        for i in range(len(self.genes)):
+            if not self.genes[i].is_equal(other.genes[i]):
+                return False
+            
+        return True
 
     def matching_gene(self, parent: Genome, innovation: int):
         """

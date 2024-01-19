@@ -2,7 +2,7 @@ from __future__ import annotations
 import math
 from typing import Callable
 from multiprocessing.pool import ThreadPool
-from __types__ import NeatConfig
+from __init__ import NeatConfig
 from genome import Genome
 from connection_history import ConnectionHistory
 from species import Species
@@ -38,7 +38,7 @@ class Population():
     - set_average_fitness() -> None: Update the average fitness for all species.
     - update_species() -> None: Update the species for the next generation.
     - get_genome(id: str) -> Genome: Get a genome by its ID.
-    - clone() -> Return a copy of this population.
+    - clone() -> Population: Return a copy of this population.
 
     """
 
@@ -270,11 +270,13 @@ class Population():
         Returns:
             Population: A copy of the population
         """
-        clone =  Population(self.config)
+        clone = Population(self.config)
         clone.genomes = self.genomes.copy()
+        clone.species = self.species.copy()
         clone.generation = self.generation
         clone.average_fitness = self.average_fitness
         clone.best_fitness = self.best_fitness
-        clone.best_genome = self.best_genome.clone()
         clone.innovation_history = self.innovation_history
+        if self.best_genome:
+            clone.best_genome = self.best_genome.clone()
         return clone
