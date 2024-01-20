@@ -45,7 +45,7 @@ def plot_population_history(population_history: "dict[int, Population]", filenam
     plt.ylabel("Fitness")
     plt.grid()
     plt.legend(loc="best")
-    if ylog:
+    if ylog:  # pragma: no cover
         plt.gca().set_yscale('symlog')
 
     plt.savefig(filename)
@@ -68,7 +68,7 @@ def plot_species(population_history: "dict[int, Population]", filename: str, ylo
     Returns:
     - None
     """
-    if plt is None:
+    if plt is None:  # pragma: no cover
         warnings.warn(
             "This display is not available due to a missing optional dependency (matplotlib)")
         return
@@ -89,7 +89,7 @@ def plot_species(population_history: "dict[int, Population]", filename: str, ylo
     plt.xlabel("Generation")
     plt.ylabel("Number of species")
     plt.title('Evolution of species')
-    if ylog:
+    if ylog:  # pragma: no cover
         plt.gca().set_yscale('symlog')
 
     plt.savefig(filename)

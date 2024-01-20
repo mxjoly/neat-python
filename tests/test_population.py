@@ -252,4 +252,3 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(clone.generation, population.generation)
         self.assertEqual(clone.average_fitness, population.average_fitness)
         self.assertEqual(clone.best_fitness, population.best_fitness)
-        self.assertEqual(clone.generation, population.generation)
