@@ -270,7 +270,7 @@ class Species():
             if self.genomes[i].is_equal(other.genomes[i]):
                 return False
 
-        return self.champion.is_equal(other.champion) and self.average_fitness == other.average_fitness and self.best_fitness == other.best_fitness
+        return True
 
     def clone(self):
         """
